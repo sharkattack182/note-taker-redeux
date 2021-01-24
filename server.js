@@ -31,27 +31,25 @@ app.get("/api/notes", function (req, res) {
     res.json(notesArray)
 });
 
-// app.post("/api/notes", function(req,res) {
-//     // var newNote = req.body;
-//     // console.log(newNote)
-//     try {
-//         noteIdCount ++;
-//         notesArray = fs.readFileSync("db/db.json", "utf8"); 
-//         req.body.id = noteIdCount;
-//         notesArray.push(req.body);
-//         notes = JSON.stringify(notesArray);
-//         fs.writeFile("/db/db.json", notes, "utf8", function(err) {
-//             if(err) {
-//                 throw err
-//             }
-//         });
+app.post("/api/notes", function(req,res) {
+    // var newNote = req.body;
+    // console.log(newNote)
+    try {
+        noteIdCount ++;
+        currentNotes = fs.readFileSync("db/db.json", "utf8"); 
+        req.body.id = noteIdCount;
+        notesArray.push(req.body);
+        console.log(notesArray);
 
-//         res.json(JSON.parse(notesArray))
-//     } catch (err) {
-//         console.log(err);
-//         throw err;
-//     }
-// });
+        fs.writeFileSync(__dirname + "/db/db.json", JSON.stringify(notesArray), (err) => {
+            if(err) throw err;
+            console.log("file made")
+        })
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+});
 
 app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "/public/index.html"));
