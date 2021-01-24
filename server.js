@@ -19,6 +19,8 @@ app.get("/notes", function (req, res) {
 
 
 // api routes
+
+// get route shows all the notes saved
 app.get("/api/notes", function (req, res) {
     try {
         notesData = fs.readFileSync("db/db.json", "utf8");
@@ -31,9 +33,8 @@ app.get("/api/notes", function (req, res) {
     res.json(notesArray)
 });
 
+// post route creates new notes when the user saves
 app.post("/api/notes", function(req,res) {
-    // var newNote = req.body;
-    // console.log(newNote)
     try {
         noteIdCount ++;
         currentNotes = fs.readFileSync("db/db.json", "utf8"); 
@@ -50,6 +51,30 @@ app.post("/api/notes", function(req,res) {
         throw err;
     }
 });
+
+// delete route that deletes a note by id
+app.delete("/api/notes/:id", function(req,res) {
+    let id = req.params.id;
+    console.log(id);
+    var newNotesArr = []
+    var savedNotes = JSON.parse(fs.readFileSync("db/db.json", "utf8"));
+    for (let i = 0; i < savedNotes.length; i++) {
+        let note = savedNotes[i];
+        console.log(note.id, id)
+        if(note.id !== parseInt(id)) {
+            newNotesArr.push(note);
+            console.log("note pushed")
+        }
+        else {
+            console.log("not pushed");
+        }
+    }
+
+    fs.writeFile(__dirname + "/db/db.json", JSON.stringify(newNotesArr), (err) => {
+        if(err) throw err;
+        console.log("file deleted")
+    })
+})
 
 app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "/public/index.html"));
