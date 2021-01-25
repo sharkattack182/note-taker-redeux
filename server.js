@@ -3,7 +3,7 @@ var path = require("path");
 var fs = require("fs");
 
 var notesArray = [];
-var noteIdCount = 0;
+var noteIdCount = 1;
 
 var app = express();
 var PORT = process.env.PORT || 5500;
